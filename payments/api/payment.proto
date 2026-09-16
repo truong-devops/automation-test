@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package payments.v1;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/wrappers.proto";
+
+service PaymentService {
+  rpc GetPaymentByOrderID(google.protobuf.StringValue) returns (google.protobuf.Struct);
+}

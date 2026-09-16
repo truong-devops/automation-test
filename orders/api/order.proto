@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package orders.v1;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/wrappers.proto";
+
+service OrderService {
+  rpc GetOrder(google.protobuf.StringValue) returns (google.protobuf.Struct);
+}
