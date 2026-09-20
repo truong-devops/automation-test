@@ -126,3 +126,21 @@ go test ./orders/... ./payments/...
 ```
 
 Các file `.proto` trong `api/` là hợp đồng gRPC. Implementation dùng trực tiếp Protobuf well-known types, nên build không phụ thuộc vào việc cài `protoc` trên máy.
+
+
+## Cấu trúc automation test
+automation-tests/
+├── features/
+│   └── orders.feature          # Viết hành vi bằng Gherkin
+├── reports/
+│   └── cucumber.html           # Report được sinh ra sau khi chạy
+├── go.mod                      # Dependency riêng của automation test
+├── go.sum                      # Checksum dependency, không sửa tay
+├── suite_test.go               # Điểm bắt đầu chạy Godog
+├── world_test.go               # Bộ nhớ riêng của mỗi scenario
+├── hooks_test.go               # Reset Mongo trước mỗi scenario
+├── fixtures_test.go            # Đọc Gherkin DataTable và tạo order mẫu
+├── order_steps_test.go         # Nối câu Gherkin với hàm Go
+├── assertions_test.go          # Kiểm tra status và JSON response
+├── report.js                   # Chuyển Cucumber JSON thành HTML
+└── Makefile                    # Gom các lệnh chạy test
