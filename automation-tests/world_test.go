@@ -1,15 +1,9 @@
 package automationtests
 
 import (
-	"context"
-	"fmt"
+	"go.mongodb.org/mongo-driver/mongo"
 	"net/http"
 	"time"
-
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
 type World struct {
@@ -17,7 +11,8 @@ type World struct {
 	httpClient  *http.Client
 	mongoClient *mongo.Client
 
-	aliases map[string]string
+	aliases         map[string]string
+	requestFixtures map[string][]byte
 
 	lastStatus int
 	lastBody   []byte
@@ -25,50 +20,18 @@ type World struct {
 
 func newWorld() *World {
 	return &World{
-		baseURL: "http://localhost:8081",
-		httpClient: &http.Client{
-			Timeout: 5 * time.Second,
-		},
-		aliases: make(map[string]string),
+		baseURL:    "http://localhost:8081",
+		httpClient: &http.Client{Timeout: 5 * time.Second},
+
+		aliases:         make(map[string]string),
+		requestFixtures: make(map[string][]byte),
 	}
 }
 
-func (w *World) connectMongo(ctx context.Context) error {
-	client, err := mongo.Connect(
-		ctx,
-		options.Client().ApplyURI("mongodb://localhost:27018"),
-	)
-	if err != nil {
-		return err
-	}
+func (w *World) resetScenarioState() {
+	w.aliases = make(map[string]string)
+	w.requestFixtures = make(map[string][]byte)
 
-	if err := client.Ping(ctx, readpref.Primary()); err != nil {
-		return err
-	}
-
-	w.mongoClient = client
-
-	fmt.Println("MongoDB connected!")
-
-	return nil
-}
-
-func (w *World) closeMongo(ctx context.Context) error {
-	if w.mongoClient == nil {
-		return nil
-	}
-
-	return w.mongoClient.Disconnect(ctx)
-}
-
-func (w *World) resetMongo(ctx context.Context) error {
-	result, err := w.mongoClient.Database("orders_db").Collection("orders").DeleteMany(ctx, bson.M{})
-
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("MongoDB reset, deleted %d orders\n", result.DeletedCount)
-
-	return nil
+	w.lastStatus = 0
+	w.lastBody = nil
 }

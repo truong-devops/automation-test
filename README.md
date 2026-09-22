@@ -65,6 +65,7 @@ GET    /api/v1/orders
 POST   /api/v1/orders
 GET    /api/v1/orders/{id}
 PUT    /api/v1/orders/{id}
+PATCH  /api/v1/orders/{id}
 DELETE /api/v1/orders/{id}
 ```
 
@@ -76,6 +77,7 @@ GET    /api/v1/payments
 POST   /api/v1/payments
 GET    /api/v1/payments/{id}
 PUT    /api/v1/payments/{id}
+PATCH  /api/v1/orders/{id}
 DELETE /api/v1/payments/{id}
 ```
 
