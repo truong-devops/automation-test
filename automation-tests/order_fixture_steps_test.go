@@ -36,8 +36,7 @@ func buildOrderPayload(data map[string]string) ([]byte, error) {
 		return nil, err
 	}
 
-	totalAmount, err :=
-		strconv.Atoi(data["total_amount"])
+	totalAmount, err := strconv.Atoi(data["total_amount"])
 
 	if err != nil {
 		return nil, err
@@ -68,22 +67,14 @@ func (w *World) theFollowingOrdersExist(ctx context.Context, table *godog.Table)
 			return err
 		}
 
-		err = w.sendRequestWithBody(
-			ctx,
-			http.MethodPost,
-			"/api/v1/orders",
-			body,
-		)
+		err = w.sendRequestWithBody( ctx, http.MethodPost, "/api/v1/orders", body, )
 
 		if err != nil {
 			return err
 		}
 
 		if w.lastStatus != http.StatusCreated {
-			return fmt.Errorf(
-				"failed to create fixture %s",
-				data["alias"],
-			)
+			return fmt.Errorf( "failed to create fixture %s", data["alias"], )
 		}
 
 		var response struct {
@@ -92,15 +83,11 @@ func (w *World) theFollowingOrdersExist(ctx context.Context, table *godog.Table)
 			} `json:"data"`
 		}
 
-		if err := json.Unmarshal(
-			w.lastBody,
-			&response,
-		); err != nil {
+		if err := json.Unmarshal( w.lastBody, &response, ); err != nil {
 			return err
 		}
 
-		w.aliases[data["alias"]] =
-			response.Data.ID
+		w.aliases[data["alias"]] = response.Data.ID
 	}
 
 	return nil

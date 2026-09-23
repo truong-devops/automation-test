@@ -1,17 +1,19 @@
 package automationtests
 
 import (
+	"os"
 	"github.com/cucumber/godog"
 	"testing"
 )
 
 func TestFeatures(t *testing.T) {
 	suite := godog.TestSuite{
-		Name:                "orders-api",
+		Name:            "orders-api",
 		ScenarioInitializer: InitializeScenario,
 		Options: &godog.Options{
 			Format:      "pretty",
 			Paths:       []string{"features"},
+			Tags:        os.Getenv("GODOG_TAGS"),
 			Strict:      true,
 			Concurrency: 1,
 			TestingT:    t,
