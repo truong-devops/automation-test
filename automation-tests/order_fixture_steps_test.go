@@ -11,7 +11,7 @@ import (
 )
 
 func tableToMaps(table *godog.Table) ([]map[string]string, error) {
-
+	
 	headers := table.Rows[0].Cells
 
 	var result []map[string]string
@@ -25,7 +25,7 @@ func tableToMaps(table *godog.Table) ([]map[string]string, error) {
 
 		result = append(result, data)
 	}
-
+	
 	return result, nil
 }
 
@@ -37,7 +37,6 @@ func buildOrderPayload(data map[string]string) ([]byte, error) {
 	}
 
 	totalAmount, err := strconv.Atoi(data["total_amount"])
-
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +48,6 @@ func buildOrderPayload(data map[string]string) ([]byte, error) {
 		"total_amount":  totalAmount,
 		"status":        data["status"],
 	}
-
 	return json.Marshal(payload)
 }
 
@@ -68,7 +66,6 @@ func (w *World) theFollowingOrdersExist(ctx context.Context, table *godog.Table)
 		}
 
 		err = w.sendRequestWithBody( ctx, http.MethodPost, "/api/v1/orders", body, )
-
 		if err != nil {
 			return err
 		}
@@ -78,9 +75,7 @@ func (w *World) theFollowingOrdersExist(ctx context.Context, table *godog.Table)
 		}
 
 		var response struct {
-			Data struct {
-				ID string `json:"id"`
-			} `json:"data"`
+			Data struct { ID string `json:"id"` } `json:"data"`
 		}
 
 		if err := json.Unmarshal( w.lastBody, &response, ); err != nil {
@@ -106,7 +101,6 @@ func (w *World) theFollowingOrderRequestFixtures(table *godog.Table) error {
 		if err != nil {
 			return err
 		}
-
 		w.requestFixtures[data["alias"]] = body
 	}
 

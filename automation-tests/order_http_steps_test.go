@@ -6,18 +6,42 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"strings"
+//	"strings"
+	"regexp"
 )
 
+// func (w *World) resolveAliases(path string) (string, error) {
+
+// 	result := path
+
+// 	for alias, id := range w.aliases {
+// 		result = strings.ReplaceAll(result, "{"+alias+"}", id)
+// 	}
+
+// 	if strings.Contains(result, "{") {
+// 		return "", fmt.Errorf("unknown alias in %q", result)
+// 	}
+
+// 	return result, nil
+// }
+
+var aliasRegex = regexp.MustCompile(`\{([^}]+)\}`)
+
 func (w *World) resolveAliases(path string) (string, error) {
+	var err error
 
-	result := path
+	result := aliasRegex.ReplaceAllStringFunc(path, func(match string) string {
+		aliasName := match[1 : len(match)-1]
 
-	for alias, id := range w.aliases {
-		result = strings.ReplaceAll(result, "{"+alias+"}", id)
-	}
+		if id, exists := w.aliases[aliasName]; exists {
+			return id
+		}
 
-	if strings.Contains(result, "{") {
+		err = fmt.Errorf("unknown alias %q", aliasName)
+		return match
+	})
+
+	if err != nil {
 		return "", fmt.Errorf("unknown alias in %q", result)
 	}
 

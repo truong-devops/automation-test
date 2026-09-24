@@ -1,31 +1,45 @@
 Bạn chạy:
 go test -v
-    │
-    ▼
+   │
+   ▼
+Go tìm các file *_test.go
+   │
+   ▼
 suite_test.go
-    │
-    │ khởi động Godog
-    ▼
-features/orders.feature
-    │
-    │ đọc Given / When / Then
-    ▼
-InitializeScenario()
-    │
-    │ tìm step definition tương ứng
-    ▼
+   │
+   └── TestFeatures(t *testing.T)
+          │
+          ▼
+      godog.TestSuite
+          │
+          ├── Paths: features/
+          ├── Tags: GODOG_TAGS
+          ├── ScenarioInitializer: InitializeScenario
+          └── TestingT: t
+          │
+          ▼
+      suite.Run()
+          │
+          ▼
+Godog đọc tất cả file .feature
+          │
+          ├── create_order.feature
+          ├── get_orders.feature
+          ├── update_order.feature
+          └── delete_order.feature
+          │
+          ▼
+Godog lấy từng Scenario
+          │
+          ▼
 order_steps_test.go
-    │
-    ├── Given → chuẩn bị dữ liệu test
-    ├── When  → gọi API
-    └── Then  → kiểm tra kết quả
-            │
-            ▼
-          World
-   lưu response/status/ID
-            │
-            ▼
-     Orders Service :8081
-            │
-            ▼
-          MongoDB
+InitializeScenario()
+          │
+          ├── tạo World
+          ├── đăng ký Before / After
+          ├── map Given
+          ├── map When
+          └── map Then
+          │
+          ▼
+      chạy Scenario

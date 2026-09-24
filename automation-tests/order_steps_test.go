@@ -8,7 +8,7 @@ import (
 func InitializeScenario(scenario *godog.ScenarioContext) {
 	world := newWorld()
 
-	scenario.Before(func(ctx context.Context, sc *godog.Scenario) (context.Context, error) {
+	scenario.Before( func(ctx context.Context, sc *godog.Scenario) (context.Context, error) {
 		world.resetScenarioState()
 
 		err := world.connectMongo(ctx)

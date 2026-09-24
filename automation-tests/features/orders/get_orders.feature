@@ -6,8 +6,8 @@ Feature: Get orders
 
     Scenario: GET an order by ID
         Given the following orders exist:
-            | alias   | customer_name | item  | quantity | total_amount | status    |
-            | order_c | Ci Ci         | Nokia | 3        | 33000        | confirmed |
+            | alias   | customer_name | item  | quantity | total_amount | status    | test   |
+            | order_c | Ci Ci         | Nokia | 3        | 33000        | confirmed | truong |
 
         When I send a GET request to "/api/v1/orders/{order_c}"
 
